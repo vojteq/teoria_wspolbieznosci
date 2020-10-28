@@ -21,7 +21,7 @@ public class Monitor {
         }
         values.add((random.nextInt() % 50) + 50);
         System.out.println("produced: " + values.get(values.size() - 1) + " -> size: " + values.size());
-        notify();
+        notifyAll();
     }
 
     public synchronized void consume() throws InterruptedException {
@@ -31,6 +31,6 @@ public class Monitor {
         }
         System.out.println("consumed: " + values.get(0) + " -> size: " + values.size());
         values.remove(0);
-        notify();
+        notifyAll();
     }
 }
