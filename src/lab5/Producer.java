@@ -9,12 +9,11 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
+        ProducerTicket ticket = null;
         while (true) {
-            try {
-                monitor.produce();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ticket = monitor.getProducerTicket();
+            monitor.produce(ticket);
+            ticket = null;
         }
     }
 }

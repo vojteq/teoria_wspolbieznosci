@@ -9,12 +9,11 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
+        ConsumerTicket ticket = null;
         while (true) {
-            try {
-                monitor.consume();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            ticket = monitor.getConsumerTicket();
+            monitor.consume(ticket);
+            ticket = null;
         }
     }
 }
