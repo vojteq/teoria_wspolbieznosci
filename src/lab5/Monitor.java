@@ -1,7 +1,5 @@
 package lab5;
 
-import javax.lang.model.type.NullType;
-import java.lang.reflect.Array;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Random;
@@ -9,27 +7,24 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Monitor {
-    // TODO: jaka struktura do values zeby sie dalo sprawdzic jej rozmiar ale zeby ZAPIS ODCZYT USUNIECIE byly O(1)
-    // TODO: wyjebac tablice ...taken?
-    // TODO: ktore signal() gdzie
 
     // klucz -> id producenta
     // wartpsc -> wyprodukowana liczba
-    private LinkedHashMap<Integer, Integer> values;
-    private LinkedList<ProducerTicket> producerTickets;
+    private final LinkedHashMap<Integer, Integer> values;
+    private final LinkedList<ProducerTicket> producerTickets;
 
     // klucz -> id producenta ktory wyprodukowal a wiec stworzyl ConsumerTicket
     // wartosc ->
-    private LinkedHashMap<Integer, ConsumerTicket> consumerTickets;
+    private final LinkedHashMap<Integer, ConsumerTicket> consumerTickets;
 
     // id producenta ktory wyprodukowal, po zjedzeniu przez konsumenta usuwamy jedna wartosc
-    private LinkedList<Integer> producedBy;
-    private int maxSize;
-    private Random random;
-    private ReentrantLock producerTicketLock;
-    private ReentrantLock consumerTicketLock;
-    private Condition producersCond;
-    private Condition consumersCond;
+    private final LinkedList<Integer> producedBy;
+    private final int maxSize;
+    private final Random random;
+    private final ReentrantLock producerTicketLock;
+    private final ReentrantLock consumerTicketLock;
+    private final Condition producersCond;
+    private final Condition consumersCond;
 
 
     public Monitor(int maxSize) {
@@ -52,7 +47,7 @@ public class Monitor {
         ProducerTicket ticket = null;
         producerTicketLock.lock();
         try {
-            while (values.size() >= maxSize || producerTickets.size() == 0) {
+            while (values.size() == maxSize || producerTickets.size() == 0) {
                 System.out.println("producer " + Thread.currentThread().getId() + " is waiting");
                 producersCond.await();
             }
