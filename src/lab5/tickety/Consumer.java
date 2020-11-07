@@ -1,4 +1,4 @@
-package lab5;
+package lab5.tickety;
 
 public class Consumer implements Runnable {
     private Monitor monitor;

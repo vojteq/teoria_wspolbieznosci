@@ -1,4 +1,4 @@
-package lab5;
+package lab5.tickety;
 
 public class Producer implements Runnable {
     private Monitor monitor;

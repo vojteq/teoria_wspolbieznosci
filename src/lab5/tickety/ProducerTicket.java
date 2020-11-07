@@ -1,11 +1,9 @@
-package lab5;
+package lab5.tickety;
 
-import java.util.Objects;
-
-public class ConsumerTicket {
+public class ProducerTicket {
     private final int id;
 
-    ConsumerTicket(int id) {
+    ProducerTicket(int id) {
         this.id = id;
     }
 

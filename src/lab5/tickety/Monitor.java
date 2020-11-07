@@ -1,23 +1,14 @@
-package lab5;
+package lab5.tickety;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Monitor {
-    // TODO tablica values i lista indeksow z pod ktorych mozna wyciagac / pod ktore mozna wkladac (2 listy)
-    // klucz -> id producenta
-    // wartpsc -> wyprodukowana liczba
     private final int[] values;
     private final LinkedList<ProducerTicket> producerTickets;
-
-    // klucz -> id producenta ktory wyprodukowal a wiec stworzyl ConsumerTicket
-    // wartosc ->
     private final LinkedList<ConsumerTicket> consumerTickets;
-
-    // id producenta ktory wyprodukowal, po zjedzeniu przez konsumenta usuwamy jedna wartosc
     private final int maxSize;
     private final Random random;
     private final ReentrantLock producerTicketLock;
