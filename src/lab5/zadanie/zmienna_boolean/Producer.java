@@ -1,4 +1,4 @@
-package lab5.zadanie;
+package lab5.zadanie.zmienna_boolean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,18 @@ public class Producer implements Runnable {
     public void run() {
         while (true) {
             try {
+//                zakleszczenia / normalnie
                 monitor.produce(this, produce(Math.abs(random.nextInt() % maxElements) + 1));
+//                koniec zakleszczen / normalnego
+
+//                zagladzanie
+//                if (id == 0) {
+//                    monitor.produce(this, produce(maxElements));
+//                }
+//                else {
+//                    monitor.produce(this, produce(1));
+//                }
+//                koniec zagladzania
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

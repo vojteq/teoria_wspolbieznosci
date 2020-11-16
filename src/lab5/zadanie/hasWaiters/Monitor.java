@@ -1,4 +1,4 @@
-package lab5.zadanie;
+package lab5.zadanie.hasWaiters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,6 @@ public class Monitor {
     private final Condition firstProducerCond;
     private final Condition restConsumersCond;
     private final Condition firstConsumerCond;
-    private boolean isFirstProducer = false;
-    private boolean isFirstConsumer = false;
 
     public Monitor(int maxSize) {
         values = new ArrayList<>();
@@ -29,17 +27,15 @@ public class Monitor {
     public void produce(Producer producer, List<Integer> data) throws InterruptedException {
         lock.lock();
         try {
-//            while (lock.hasWaiters(firstProducerCond)) {
-            while (isFirstProducer) {
+            while (lock.hasWaiters(firstProducerCond)) {
+                System.out.println("producer" + producer.getId() + " is waiting (not first)");
                 restProducersCond.await();
             }
             while (!hasEnoughSpace(data.size())) {
                 System.out.println("producer" + producer.getId() + " is waiting" +
                         " (not enough space (size:" + values.size() + ", max size:" + MAX_SIZE +  ", to insert:" + data.size() + ")");
-                isFirstProducer = true;
                 firstProducerCond.await();
             }
-            isFirstProducer = false;
             values.addAll(data);
             System.out.println("(producer" + producer.getId() + " (" + producer.count() + ")" + ")" +
                     " produced(" + data.size() + "): " + data + " -> size: " + values.size());
@@ -55,17 +51,15 @@ public class Monitor {
         List<Integer> consumed = new ArrayList<>();
         lock.lock();
         try {
-//            while (lock.hasWaiters(firstConsumerCond)) {
-            while (isFirstConsumer) {
+            while (lock.hasWaiters(firstConsumerCond)) {
+                System.out.println("consumer" + consumer.getId() + " is waiting (not first)");
                 restConsumersCond.await();
             }
             while (!hasEnoughData(dataSize)) {
                 System.out.println("consumer" + consumer.getId() + " is waiting" +
                         " (not enough items (available: " + values.size() + ", requested: " + dataSize + ")");
-                isFirstConsumer = true;
                 firstConsumerCond.await();
             }
-            isFirstConsumer = false;
             for (int i = 0; i < dataSize; i++) {
                 consumed.add(values.remove(0));
             }

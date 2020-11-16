@@ -1,4 +1,4 @@
-package lab5.zadanie;
+package lab5.zadanie.zmienna_boolean;
 
 import java.util.Random;
 
@@ -21,7 +21,18 @@ public class Consumer implements Runnable {
     public void run() {
         while (true) {
             try {
+//                zakleszczenia / normalnie
                 monitor.consume(this, Math.abs(random.nextInt() % maxElements) + 1);
+//                koniec zakleszczen / normalnego
+
+//                zagladzanie
+//                if (id == 0) {
+//                    monitor.consume(this, maxElements);
+//                }
+//                else {
+//                    monitor.consume(this, 1);
+//                }
+//                koniec zagladzania
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
