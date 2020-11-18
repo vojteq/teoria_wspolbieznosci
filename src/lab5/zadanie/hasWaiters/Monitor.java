@@ -56,7 +56,7 @@ public class Monitor {
                 restConsumersCond.await();
             }
             while (!hasEnoughData(dataSize)) {
-                System.out.println("consumer" + consumer.getId() + " is waiting" +
+                System.out.println("consumer" + consumer.getId() + " is waiting (first)" +
                         " (not enough items (available: " + values.size() + ", requested: " + dataSize + ")");
                 firstConsumerCond.await();
             }

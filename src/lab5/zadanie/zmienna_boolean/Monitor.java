@@ -34,7 +34,7 @@ public class Monitor {
                 restProducersCond.await();
             }
             while (!hasEnoughSpace(data.size())) {
-                System.out.println("producer" + producer.getId() + " is waiting" +
+                System.out.println("producer" + producer.getId() + " is waiting (first)" +
                         " (not enough space (size:" + values.size() + ", max size:" + MAX_SIZE +  ", to insert:" + data.size() + ")");
                 isFirstProducer = true;
                 firstProducerCond.await();

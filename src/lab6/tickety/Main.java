@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        Monitor monitor = new Monitor(10);
+        Buffer buffer = new Buffer(10);
+        Monitor monitor = new Monitor(10, buffer);
         int no_producers = 2, no_consumers = 2;
         ArrayList<Thread> producers = new ArrayList<>();
         ArrayList<Thread> consumers = new ArrayList<>();
