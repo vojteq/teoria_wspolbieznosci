@@ -137,7 +137,7 @@ class ProdCons {
         try{
             this.countProcessesInBuffer();
             pushProdTicket(ticket);
-//            System.out.println("Consumer "+ id + " returned ticket " + ticket);
+            System.out.println("Consumer "+ id + " returned ticket " + ticket);
             consumers--;
             producerCond.signal();
         } finally {

@@ -1,9 +1,9 @@
 package lab6.tickety;
 
-public class ConsumerTicket {
+public class Ticket {
     private final int id;
 
-    ConsumerTicket(int id) {
+    Ticket(int id) {
         this.id = id;
     }
 

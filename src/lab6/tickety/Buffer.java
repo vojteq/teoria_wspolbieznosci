@@ -5,41 +5,34 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Buffer {
     private ConcurrentHashMap<Integer, Integer> values;
-    private final int size;
-    private final Random random;
+//    private final int SIZE;
 
     public Buffer(int size) {
         values = new ConcurrentHashMap<>();
-        this.size = size;
-        random = new Random();
     }
 
-    public void produce(ProducerTicket ticket) {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        int producedValue = random.nextInt() % 50 + 50;
-        values.put(ticket.getId(), producedValue);
-        System.out.println("produced: " + producedValue);
+    public void produce(Ticket ticket, int value) {
+//        this.longOperation();
+        if (values.containsKey(ticket.getId())) {
+            throw new RuntimeException("There already is product with tickedID=" + ticket.getId());
+        }
+        values.put(ticket.getId(), value);
+        System.out.println("produced: " + value);
     }
 
-    public void consume(ConsumerTicket ticket) {
-//        try {
-//            Thread.sleep(1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+    public void consume(Ticket ticket) {
+//        this.longOperation();
+        if (!values.containsKey(ticket.getId())) {
+            throw new RuntimeException("There is no product with ticketID=" + ticket.getId());
+        }
         System.out.println("consumed: " + values.remove(ticket.getId()));
     }
 
-
-    public boolean hasSpace() {
-        return values.size() + 1 <= size;
-    }
-
-    public boolean hasElements() {
-        return !values.isEmpty();
+    private void longOperation() {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

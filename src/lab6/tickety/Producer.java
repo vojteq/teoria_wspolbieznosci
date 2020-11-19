@@ -1,18 +1,26 @@
 package lab6.tickety;
 
-public class Producer implements Runnable {
-    private Monitor monitor;
+import java.util.Random;
 
-    public Producer(Monitor monitor) {
+public class Producer implements Runnable {
+    private final Monitor monitor;
+    private final Buffer buffer;
+
+    public Producer(Monitor monitor, Buffer buffer) {
         this.monitor = monitor;
+        this.buffer = buffer;
     }
 
     @Override
     public void run() {
-        ProducerTicket ticket = null;
+        Random random = new Random();
+        Ticket ticket = null;
         while (true) {
             ticket = monitor.getProducerTicket();
-            monitor.produce(ticket);
+//            monitor.produce(ticket);
+            int producedValue = random.nextInt() % 50 + 50;
+            buffer.produce(ticket, producedValue);
+            monitor.returnProducerTicket(ticket);
             ticket = null;
         }
     }

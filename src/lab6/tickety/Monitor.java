@@ -1,44 +1,40 @@
 package lab6.tickety;
 
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Monitor {
-    private final Buffer buffer;
-    private final LinkedList<ProducerTicket> producerTickets;
-    private final LinkedList<ConsumerTicket> consumerTickets;
-    private final LinkedList<ConsumerTicket> consumerTicketsGiven;
-    private final int maxSize;
+    private final Queue<Ticket> producerTickets;
+    private final Queue<Ticket> consumerTickets;
+    private final int MAX_SIZE;
     private final ReentrantLock lock;
     private final Condition producersCond;
     private final Condition consumersCond;
 
 
-    public Monitor(int maxSize, Buffer buffer) {
-        producerTickets = new LinkedList<>();
-        consumerTickets = new LinkedList<>();
-        consumerTicketsGiven = new LinkedList<>();
-        this.buffer = buffer;
-        this.maxSize = maxSize;
-        for (int i = 0; i < maxSize; i++) {
-            producerTickets.add(new ProducerTicket(i));
+    public Monitor(int maxSize) {
+        this.producerTickets = new LinkedList<>();
+        this.consumerTickets = new LinkedList<>();
+        this.MAX_SIZE = maxSize;
+        for (int i = 0; i < MAX_SIZE; i++) {
+            producerTickets.add(new Ticket(i));
         }
-        lock = new ReentrantLock();
-        producersCond = lock.newCondition();
-        consumersCond = lock.newCondition();
+        this.lock = new ReentrantLock();
+        this.producersCond = lock.newCondition();
+        this.consumersCond = lock.newCondition();
     }
 
-    public ProducerTicket getProducerTicket() {
-        ProducerTicket ticket = null;
+    public Ticket getProducerTicket() {
+        Ticket ticket = null;
         this.lock.lock();
         try {
-            while (producerTickets.size() == 0 || !buffer.hasSpace()) {
+            while (this.producerTickets.isEmpty()) {
                 System.out.println("producer " + Thread.currentThread().getId() + " is waiting");
-                producersCond.await();
+                this.producersCond.await();
             }
-            ticket = producerTickets.remove(0);
-            producersCond.signal();
+            ticket = this.producerTickets.remove();
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -49,17 +45,15 @@ public class Monitor {
         return ticket;
     }
 
-    public ConsumerTicket getConsumerTicket() {
-        ConsumerTicket ticket = null;
+    public Ticket getConsumerTicket() {
+        Ticket ticket = null;
         this.lock.lock();
         try {
-            while (consumerTickets.size() == 0 || !buffer.hasElements()) {
+            while (this.consumerTickets.isEmpty()) {
                 System.out.println("consumer " + Thread.currentThread().getId() + " is waiting");
-                consumersCond.await();
+                this.consumersCond.await();
             }
-            ticket = consumerTickets.remove(0);
-            consumerTicketsGiven.add(ticket);
-            consumersCond.signal();
+            ticket = this.consumerTickets.remove();
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -70,23 +64,29 @@ public class Monitor {
         return ticket;
     }
 
-    public void produce(ProducerTicket ticket) {
-        buffer.produce(ticket);
-        consumerTickets.add(new ConsumerTicket(ticket.getId()));
-        producerTickets.add(ticket);
-
-        lock.lock();
-        int threads = maxSize - producerTickets.size() + consumerTicketsGiven.size();
-        System.out.println("(P)threads in buffer: " + threads);
-        lock.unlock();
+    public void returnProducerTicket(Ticket ticket) {
+        this.lock.lock();
+        try {
+            this.countThreads();
+            this.consumerTickets.add(ticket);
+            this.consumersCond.signal();
+        } finally {
+            this.lock.unlock();
+        }
     }
 
-    public void consume(ConsumerTicket ticket) {
+    public void returnConsumerTicket(Ticket ticket) {
+        this.lock.lock();
+        try {
+            this.countThreads();
+            this.producerTickets.add(ticket);
+            this.producersCond.signal();
+        } finally {
+            this.lock.unlock();
+        }
+    }
 
-        lock.lock();
-        int threads = maxSize - producerTickets.size() + consumerTicketsGiven.size();
-        consumerTicketsGiven.remove(ticket);
-        System.out.println("(C)threads in buffer: " + threads);
-        lock.unlock();
+    private void countThreads() {
+        System.out.println("threads in buffer: " + (this.MAX_SIZE - producerTickets.size() - consumerTickets.size()));
     }
 }
