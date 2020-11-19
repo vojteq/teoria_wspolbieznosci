@@ -15,78 +15,78 @@ public class Monitor {
 
 
     public Monitor(int maxSize) {
-        this.producerTickets = new LinkedList<>();
-        this.consumerTickets = new LinkedList<>();
-        this.MAX_SIZE = maxSize;
+        producerTickets = new LinkedList<>();
+        consumerTickets = new LinkedList<>();
+        MAX_SIZE = maxSize;
         for (int i = 0; i < MAX_SIZE; i++) {
             producerTickets.add(new Ticket(i));
         }
-        this.lock = new ReentrantLock();
-        this.producersCond = lock.newCondition();
-        this.consumersCond = lock.newCondition();
+        lock = new ReentrantLock();
+        producersCond = lock.newCondition();
+        consumersCond = lock.newCondition();
     }
 
     public Ticket getProducerTicket() {
         Ticket ticket = null;
-        this.lock.lock();
+        lock.lock();
         try {
-            while (this.producerTickets.isEmpty()) {
+            while (producerTickets.isEmpty()) {
                 System.out.println("producer " + Thread.currentThread().getId() + " is waiting");
-                this.producersCond.await();
+                producersCond.await();
             }
-            ticket = this.producerTickets.remove();
+            ticket = producerTickets.remove();
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
         finally {
-            this.lock.unlock();
+            lock.unlock();
         }
         return ticket;
     }
 
     public Ticket getConsumerTicket() {
         Ticket ticket = null;
-        this.lock.lock();
+        lock.lock();
         try {
-            while (this.consumerTickets.isEmpty()) {
+            while (consumerTickets.isEmpty()) {
                 System.out.println("consumer " + Thread.currentThread().getId() + " is waiting");
-                this.consumersCond.await();
+                consumersCond.await();
             }
-            ticket = this.consumerTickets.remove();
+            ticket = consumerTickets.remove();
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
         finally {
-            this.lock.unlock();
+            lock.unlock();
         }
         return ticket;
     }
 
     public void returnProducerTicket(Ticket ticket) {
-        this.lock.lock();
+        lock.lock();
         try {
             this.countThreads();
-            this.consumerTickets.add(ticket);
-            this.consumersCond.signal();
+            consumerTickets.add(ticket);
+            consumersCond.signal();
         } finally {
-            this.lock.unlock();
+            lock.unlock();
         }
     }
 
     public void returnConsumerTicket(Ticket ticket) {
-        this.lock.lock();
+        lock.lock();
         try {
             this.countThreads();
-            this.producerTickets.add(ticket);
-            this.producersCond.signal();
+            producerTickets.add(ticket);
+            producersCond.signal();
         } finally {
-            this.lock.unlock();
+            lock.unlock();
         }
     }
 
     private void countThreads() {
-        System.out.println("threads in buffer: " + (this.MAX_SIZE - producerTickets.size() - consumerTickets.size()));
+        System.out.println("threads in buffer: " + (MAX_SIZE - producerTickets.size() - consumerTickets.size()));
     }
 }
