@@ -1,14 +1,15 @@
 package lab6.tickety;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Buffer {
-    private ConcurrentHashMap<Integer, Integer> values;
+    private final HashMap<Integer, Integer> values;
 //    private final int SIZE;
 
-    public Buffer(int size) {
-        values = new ConcurrentHashMap<>();
+    public Buffer() {
+        values = new HashMap<>();
     }
 
     public void produce(Ticket ticket, int value) {
