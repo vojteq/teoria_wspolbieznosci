@@ -2,6 +2,7 @@ package lab7.active_object;
 
 import lab7.active_object.method_requests.ConsumeRequest;
 import lab7.active_object.method_requests.ProduceRequest;
+import static lab7.active_object.ColorUtil.print;
 
 public class Scheduler {
     private final ActivationQueue activationQueue;
@@ -24,6 +25,7 @@ public class Scheduler {
             if (activationQueue.produceRequestQueueNotEmpty()) {
                 if (activationQueue.firstProduceRequestCanBeExecuted()) {
                     ProduceRequest produceRequest = activationQueue.dequeueProduceRequest();
+                    print("executing produce request", Color.GREEN);
                     produceRequest.execute();
                 }
             }
@@ -34,6 +36,7 @@ public class Scheduler {
             if (activationQueue.consumeRequestQueueNotEmpty()) {
                 if (activationQueue.firstConsumeRequestCanBeExecuted()) {
                     ConsumeRequest consumeRequest = activationQueue.dequeueConsumeeRequest();
+                    print("executing consume request", Color.BLUE);
                     consumeRequest.execute();
                 }
             }
