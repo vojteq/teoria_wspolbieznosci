@@ -16,7 +16,7 @@ public class ActivationQueue {
     public ActivationQueue() {
     }
 
-    public void enqueueProduceRequet(ProduceRequest produceRequest) {
+    public void enqueueProduceRequest(ProduceRequest produceRequest) {
         lock.lock();
         try {
             produceQueue.add(produceRequest);
@@ -38,7 +38,7 @@ public class ActivationQueue {
         }
     }
 
-    public void enqueueConsumeRequet(ConsumeRequest consumeRequest) {
+    public void enqueueConsumeRequest(ConsumeRequest consumeRequest) {
         lock.lock();
         try {
             consumeQueue.add(consumeRequest);
@@ -48,11 +48,11 @@ public class ActivationQueue {
         }
     }
 
-    public ConsumeRequest dequeueConsumeeRequest() {
+    public ConsumeRequest dequeueConsumeRequest() {
         ConsumeRequest request = null;
         lock.lock();
         try {
-            if (produceQueue.size() != 0)
+            if (consumeQueue.size() != 0)
                 request = consumeQueue.remove();
             return request;
         } finally {
@@ -61,11 +61,21 @@ public class ActivationQueue {
     }
 
     public boolean produceRequestQueueNotEmpty() {
-        return !produceQueue.isEmpty();
+        lock.lock();
+        try {
+            return !produceQueue.isEmpty();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public boolean consumeRequestQueueNotEmpty() {
-        return !consumeQueue.isEmpty();
+        lock.lock();
+        try {
+            return !consumeQueue.isEmpty();
+        } finally {
+            lock.unlock();
+        }
     }
 
     public boolean firstProduceRequestCanBeExecuted() {

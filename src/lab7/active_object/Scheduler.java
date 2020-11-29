@@ -12,18 +12,20 @@ public class Scheduler {
     }
 
     public void addProduceRequest(ProduceRequest produceRequest) {
-        activationQueue.enqueueProduceRequet(produceRequest);
+        activationQueue.enqueueProduceRequest(produceRequest);
     }
 
     public void addConsumeRequest(ConsumeRequest consumeRequest) {
-        activationQueue.enqueueConsumeRequet(consumeRequest);
+        activationQueue.enqueueConsumeRequest(consumeRequest);
     }
 
     public void run() {
         int emptyQueues = 0;
         while (true) {
             if (activationQueue.produceRequestQueueNotEmpty()) {
-                if (activationQueue.firstProduceRequestCanBeExecuted()) {
+                boolean a = activationQueue.firstProduceRequestCanBeExecuted();
+                if (a) {
+//                if (activationQueue.firstProduceRequestCanBeExecuted()) {
                     ProduceRequest produceRequest = activationQueue.dequeueProduceRequest();
                     print("executing produce request", Color.GREEN);
                     produceRequest.execute();
@@ -34,8 +36,10 @@ public class Scheduler {
             }
 
             if (activationQueue.consumeRequestQueueNotEmpty()) {
-                if (activationQueue.firstConsumeRequestCanBeExecuted()) {
-                    ConsumeRequest consumeRequest = activationQueue.dequeueConsumeeRequest();
+                boolean a = activationQueue.firstConsumeRequestCanBeExecuted();
+                if (a) {
+//                if (activationQueue.firstConsumeRequestCanBeExecuted()) {
+                    ConsumeRequest consumeRequest = activationQueue.dequeueConsumeRequest();
                     print("executing consume request", Color.BLUE);
                     consumeRequest.execute();
                 }

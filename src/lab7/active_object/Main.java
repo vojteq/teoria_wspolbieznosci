@@ -6,9 +6,9 @@ import java.util.concurrent.ExecutionException;
 
 public class Main {
     public static void main(String[] args) {
-        int bufferSize = 10;
+        int bufferSize = 30;
         int producers = 2;
-        int consumers = 2;
+        int consumers = 3;
         Scheduler scheduler = new Scheduler();
         BufferProxy bufferProxy = new BufferProxy(bufferSize, scheduler);
         LinkedList<Thread> producerThreads = new LinkedList<>();
@@ -30,40 +30,33 @@ public class Main {
         for (int i = 0; i  < producers; i++) {
             producerThreads.add(new Thread(() -> {
                 while (true) {
-                    FutureIntegerList futureIntegerList = bufferProxy.produceFuture(random.nextInt());
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (futureIntegerList.isDone()) {
-                        try {
-                            System.out.println(futureIntegerList.get());
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    FutureIntegerList futureIntegerList = bufferProxy.produceFuture(Math.abs(random.nextInt() % 10));
+                    printAndWait(futureIntegerList);
                 }
             }));
         }
         for (int i = 0; i  < consumers; i++) {
             consumerThreads.add(new Thread(() -> {
                 while (true) {
-                    FutureIntegerList futureIntegerList = bufferProxy.produceFuture(random.nextInt());
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (futureIntegerList.isDone()) {
-                        try {
-                            System.out.println(futureIntegerList.get());
-                        } catch (InterruptedException | ExecutionException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % 10));
+                    printAndWait(futureIntegerList);
                 }
             }));
+        }
+    }
+
+    private static void printAndWait(FutureIntegerList futureIntegerList) {
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (futureIntegerList.isDone()) {
+            try {
+                System.out.println(futureIntegerList.get());
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

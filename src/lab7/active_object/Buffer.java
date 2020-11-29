@@ -16,7 +16,7 @@ public class Buffer {
 
     public LinkedList<Integer> consume(int n) {
         LinkedList<Integer> list = new LinkedList<>();
-        for (int i = n; i > 0; i++) {
+        for (int i = n; i > 0; i--) {
             list.add(values.remove());
         }
         return list;
