@@ -23,13 +23,13 @@ public class FutureIntegerList implements Future<LinkedList<Integer>> {
     }
 
     @Override
-    public LinkedList<Integer> get() throws InterruptedException, ExecutionException {
+    public LinkedList<Integer> get() throws InterruptedException {
         latch.await();
         return result;
     }
 
     @Override
-    public LinkedList<Integer> get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public LinkedList<Integer> get(long timeout, TimeUnit unit) throws InterruptedException, TimeoutException {
         if (latch.await(timeout, unit)) {
             return result;
         }
@@ -40,5 +40,6 @@ public class FutureIntegerList implements Future<LinkedList<Integer>> {
 
     public void put(LinkedList<Integer> values) {
         result = values;
+        latch.countDown();
     }
 }

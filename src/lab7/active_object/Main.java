@@ -1,8 +1,6 @@
 package lab7.active_object;
 
 import java.util.LinkedList;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,7 +13,7 @@ public class Main {
         LinkedList<Thread> consumerThreads = new LinkedList<>();
 
         createThreads(producers, producerThreads, consumers, consumerThreads, bufferProxy);
-        Thread schedulerThread = new Thread(scheduler::run);
+        Thread schedulerThread = new Thread(scheduler);
         schedulerThread.start();
         for (Thread thread : producerThreads) {
             thread.start();
@@ -25,38 +23,13 @@ public class Main {
         }
     }
 
-    private static void createThreads(int producers, LinkedList<Thread> producerThreads, int consumers, LinkedList<Thread> consumerThreads, BufferProxy bufferProxy) {
-        Random random = new Random();
+    private static void createThreads(int producers, LinkedList<Thread> producerThreads,
+                                      int consumers, LinkedList<Thread> consumerThreads, BufferProxy bufferProxy) {
         for (int i = 0; i  < producers; i++) {
-            producerThreads.add(new Thread(() -> {
-                while (true) {
-                    FutureIntegerList futureIntegerList = bufferProxy.produceFuture(Math.abs(random.nextInt() % 10));
-                    printAndWait(futureIntegerList);
-                }
-            }));
+            producerThreads.add(new Thread(new Producer(bufferProxy)));
         }
         for (int i = 0; i  < consumers; i++) {
-            consumerThreads.add(new Thread(() -> {
-                while (true) {
-                    FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % 10));
-                    printAndWait(futureIntegerList);
-                }
-            }));
-        }
-    }
-
-    private static void printAndWait(FutureIntegerList futureIntegerList) {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (futureIntegerList.isDone()) {
-            try {
-                System.out.println(futureIntegerList.get());
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
+            consumerThreads.add(new Thread(new Consumer(bufferProxy)));
         }
     }
 }

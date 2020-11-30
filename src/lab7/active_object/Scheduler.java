@@ -4,7 +4,7 @@ import lab7.active_object.method_requests.ConsumeRequest;
 import lab7.active_object.method_requests.ProduceRequest;
 import static lab7.active_object.ColorUtil.print;
 
-public class Scheduler {
+public class Scheduler implements Runnable{
     private final ActivationQueue activationQueue;
 
     public Scheduler() {
@@ -19,15 +19,14 @@ public class Scheduler {
         activationQueue.enqueueConsumeRequest(consumeRequest);
     }
 
+    @Override
     public void run() {
         int emptyQueues = 0;
         while (true) {
             if (activationQueue.produceRequestQueueNotEmpty()) {
-                boolean a = activationQueue.firstProduceRequestCanBeExecuted();
-                if (a) {
-//                if (activationQueue.firstProduceRequestCanBeExecuted()) {
+                if (activationQueue.firstProduceRequestCanBeExecuted()) {
                     ProduceRequest produceRequest = activationQueue.dequeueProduceRequest();
-                    print("executing produce request", Color.GREEN);
+                    print("executing produce request", Color.YELLOW);
                     produceRequest.execute();
                 }
             }
@@ -36,11 +35,9 @@ public class Scheduler {
             }
 
             if (activationQueue.consumeRequestQueueNotEmpty()) {
-                boolean a = activationQueue.firstConsumeRequestCanBeExecuted();
-                if (a) {
-//                if (activationQueue.firstConsumeRequestCanBeExecuted()) {
+                if (activationQueue.firstConsumeRequestCanBeExecuted()) {
                     ConsumeRequest consumeRequest = activationQueue.dequeueConsumeRequest();
-                    print("executing consume request", Color.BLUE);
+                    print("executing consume request", Color.MAGENTA);
                     consumeRequest.execute();
                 }
             }

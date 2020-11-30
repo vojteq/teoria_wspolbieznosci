@@ -26,8 +26,9 @@ public class ProduceRequest implements MethodRequest {
     public void execute() {
         LinkedList<Integer> produced = new LinkedList<>();
         Random random = new Random();
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++) {
             produced.add(random.nextInt() % 10 + 10);
+        }
         buffer.produce(produced);
         future.put(produced);
     }
