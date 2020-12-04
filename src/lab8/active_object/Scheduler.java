@@ -1,8 +1,7 @@
-package lab7.active_object;
+package lab8.active_object;
 
-import lab7.active_object.method_requests.ConsumeRequest;
-import lab7.active_object.method_requests.ProduceRequest;
-import static lab7.active_object.ColorUtil.print;
+import lab8.active_object.method_requests.ConsumeRequest;
+import lab8.active_object.method_requests.ProduceRequest;
 
 public class Scheduler implements Runnable{
     private final ActivationQueue activationQueue;
@@ -19,6 +18,10 @@ public class Scheduler implements Runnable{
         activationQueue.enqueueConsumeRequest(consumeRequest);
     }
 
+    public boolean needProducts() {
+        return activationQueue.consumeRequestQueueNotEmpty();
+    }
+
     @Override
     public void run() {
         int emptyQueues = 0;
@@ -26,7 +29,6 @@ public class Scheduler implements Runnable{
             if (activationQueue.produceRequestQueueNotEmpty()) {
                 if (activationQueue.firstProduceRequestCanBeExecuted()) {
                     ProduceRequest produceRequest = activationQueue.dequeueProduceRequest();
-                    print("executing produce request", Color.YELLOW);
                     produceRequest.execute();
                 }
             }
@@ -37,14 +39,12 @@ public class Scheduler implements Runnable{
             if (activationQueue.consumeRequestQueueNotEmpty()) {
                 if (activationQueue.firstConsumeRequestCanBeExecuted()) {
                     ConsumeRequest consumeRequest = activationQueue.dequeueConsumeRequest();
-                    print("executing consume request", Color.MAGENTA);
                     consumeRequest.execute();
                 }
             }
             else {
                 emptyQueues++;
             }
-            
             if (emptyQueues == 2) {
                 activationQueue.bothQueuesEmpty();
             }
