@@ -41,7 +41,14 @@ public class Producer implements Runnable {
 
         long finishTime = new Date().getTime();
 
-        while (bufferProxy.needProducts()) {
+        ColorUtil.print(
+                "producer(" + ID +"): " +
+                        "done in: " + (finishTime - START_TIME) / 1000 + "s" +
+                        " additional task time: " + (additionalTaskCounter * ADDITIONAL_TASK_TIME) / 1000 + "s",
+                Color.YELLOW);
+
+//        while (bufferProxy.needProducts()) {
+        while (true) {
             FutureIntegerList futureIntegerList = bufferProxy.produceFuture(Math.abs(random.nextInt() % 10) + 1);
             try {
                 Thread.sleep(ADDITIONAL_TASK_TIME);
@@ -49,10 +56,10 @@ public class Producer implements Runnable {
                 e.printStackTrace();
             }
         }
-        ColorUtil.print(
-                "producer(" + ID +"): " +
-                        "done in: " + (finishTime - START_TIME) / 1000 + "s" +
-                        " additional task time: " + (additionalTaskCounter * ADDITIONAL_TASK_TIME) / 1000 + "s",
-                Color.YELLOW);
+//        ColorUtil.print(
+//                "producer(" + ID +"): " +
+//                        "done in: " + (finishTime - START_TIME) / 1000 + "s" +
+//                        " additional task time: " + (additionalTaskCounter * ADDITIONAL_TASK_TIME) / 1000 + "s",
+//                Color.YELLOW);
     }
 }

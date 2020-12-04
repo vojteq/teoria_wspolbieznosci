@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
         int bufferSize = 20;
-        int noProducers = 2;
-        int noConsumers = 2;
+        int noProducers = 10;
+        int noConsumers = 10;
         int productionsToDo = 100;
         int consumptionsToDo = 100;
         int productionDelay = 10;

@@ -45,5 +45,17 @@ public class Consumer implements Runnable{
                         "done in: " + (finishTime - START_TIME) / 1000 + "s" +
                         " additional task time: " + (additionalTaskCounter * ADDITIONAL_TASK_TIME) / 1000 + "s",
                 Color.MAGENTA);
+
+        while (true){
+            FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % MAX_ELEMS) + 1);
+            while (!futureIntegerList.isDone()) {
+                try {
+                    Thread.sleep(ADDITIONAL_TASK_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                additionalTaskCounter++;
+            }
+        }
     }
 }

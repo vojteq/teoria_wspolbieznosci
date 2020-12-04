@@ -5,8 +5,8 @@ import java.util.LinkedList;
 public class Main {
     public static void main(String[] args) {
         int bufferSize = 20;
-        int producers = 2;
-        int consumers = 2;
+        int producers = 10;
+        int consumers = 10;
         int productionsToDo = 100;
         int consumptionsToDo = 100;
         int productionDelay = 10;

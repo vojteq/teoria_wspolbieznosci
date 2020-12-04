@@ -38,12 +38,21 @@ public class Consumer implements Runnable {
 
         long finishTime = new Date().getTime();
 
-        monitor.dontNeedProducts();
+//        monitor.dontNeedProducts();
 
         ColorUtil.print(
                 "consumer(" + ID +"): " +
                         "done in: " + (finishTime - START_TIME) / 1000 + "s",
                 Color.MAGENTA);
+
+        while (true) {
+            try {
+                monitor.consume(Math.abs(random.nextInt() % maxElements) + 1);
+                Thread.sleep(ADDITIONAL_TASK_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public int getId() {

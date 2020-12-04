@@ -37,7 +37,13 @@ public class Producer implements Runnable {
 
         long finishTime = new Date().getTime();
 
-        while (monitor.needProducts()) {
+        ColorUtil.print(
+                "producer(" + ID +"): " +
+                        "done in: " + (finishTime - START_TIME) / 1000 + "s",
+                Color.YELLOW);
+
+//        while (monitor.needProducts()) {
+        while (true) {
             try {
                 monitor.produce(Math.abs(random.nextInt() % MAX_ELEMENTS) + 1);
                 Thread.sleep(ADDITIONAL_TASK_TIME);
@@ -46,10 +52,10 @@ public class Producer implements Runnable {
             }
         }
 
-        ColorUtil.print(
-                "producer(" + ID +"): " +
-                        "done in: " + (finishTime - START_TIME) / 1000 + "s",
-                Color.YELLOW);
+//        ColorUtil.print(
+//                "producer(" + ID +"): " +
+//                        "done in: " + (finishTime - START_TIME) / 1000 + "s",
+//                Color.YELLOW);
     }
 
     public int getId() {
