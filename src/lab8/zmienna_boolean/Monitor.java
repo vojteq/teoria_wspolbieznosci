@@ -19,7 +19,6 @@ public class Monitor {
     private boolean isFirstConsumer = false;
     private final int PRODUCTON_DELAY;
     private final int CONSUMPTON_DELAY;
-    private boolean needProducts = false;
 
     public Monitor(int maxSize, int productionDelay, int consumptionDelay) {
         values = new ArrayList<>();
@@ -64,7 +63,6 @@ public class Monitor {
                 restConsumersCond.await();
             }
             while (!hasEnoughData(itemsToBeConsumed)) {
-                needProducts = true;
                 isFirstConsumer = true;
                 firstConsumerCond.await();
             }
@@ -88,23 +86,5 @@ public class Monitor {
 
     private boolean hasEnoughData(int dataSize) {
         return values.size() >= dataSize;
-    }
-
-    public boolean needProducts() {
-        lock.lock();
-        try {
-            return this.needProducts;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void dontNeedProducts() {
-        lock.lock();
-        try {
-            needProducts = false;
-        } finally {
-            lock.unlock();
-        }
     }
 }

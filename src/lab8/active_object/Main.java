@@ -5,23 +5,18 @@ import java.util.LinkedList;
 public class Main {
     public static void main(String[] args) {
         int bufferSize = 20;
-        int producers = 10;
-        int consumers = 10;
-        int productionsToDo = 100;
-        int consumptionsToDo = 100;
-        int productionDelay = 10;
-        int consumptionDelay = 10;
-        int producerAdditionalTaskTime = 10;
-        int consumerAdditionalTaskTime = 10;
+        int threads = 1;
+        int operationsToDo = 1600;
+        int operationDelay = 20;
+        int additionalTask = 100;
         Scheduler scheduler = new Scheduler();
-        BufferProxy bufferProxy = new BufferProxy(bufferSize, scheduler, productionDelay, consumptionDelay);
+        BufferProxy bufferProxy = new BufferProxy(bufferSize, scheduler, operationDelay, operationDelay);
         LinkedList<Thread> producerThreads = new LinkedList<>();
         LinkedList<Thread> consumerThreads = new LinkedList<>();
 
-        createThreads(producers, consumers,
+        createThreads(threads,
                 producerThreads, consumerThreads,
-                productionsToDo, consumptionsToDo,
-                producerAdditionalTaskTime, consumerAdditionalTaskTime,
+                operationsToDo, additionalTask,
                 bufferProxy, bufferSize);
         Thread schedulerThread = new Thread(scheduler);
 
@@ -38,16 +33,13 @@ public class Main {
         // ale to znowu trzeba by synchronizowac bo dostep z zewnatrz... bez sensowna strata czasu a nie wazne w zadaniu
     }
 
-    private static void createThreads(int producers, int consumers,
+    private static void createThreads(int threads,
                                       LinkedList<Thread> producerThreads, LinkedList<Thread> consumerThreads,
-                                      int productionsToDo, int consumptionsToDo,
-                                      int producerAdditionalTaskTime, int consumerAdditionalTaskTime,
+                                      int operationsToDo, int additionalTask,
                                       BufferProxy bufferProxy, int bufferSize) {
-        for (int i = 0; i  < producers; i++) {
-            producerThreads.add(new Thread(new Producer(i, bufferProxy, bufferSize / 2, productionsToDo, producerAdditionalTaskTime)));
-        }
-        for (int i = 0; i  < consumers; i++) {
-            consumerThreads.add(new Thread(new Consumer(i, bufferProxy, bufferSize / 2, consumptionsToDo, consumerAdditionalTaskTime)));
+        for (int i = 0; i  < threads; i++) {
+            producerThreads.add(new Thread(new Producer(i, bufferProxy, bufferSize / 2, operationsToDo, additionalTask)));
+            consumerThreads.add(new Thread(new Consumer(i, bufferProxy, bufferSize / 2, operationsToDo, additionalTask)));
         }
     }
 }

@@ -10,51 +10,57 @@ public class Consumer implements Runnable{
     private final BufferProxy bufferProxy;
     private final int ADDITIONAL_TASK_TIME;
     private final int TASKS_TO_DO;
-    private int additionalTaskCounter;
-    private final long START_TIME;
+    private int additionalTask;
     private final int MAX_ELEMS;
 
-    public Consumer(int id, BufferProxy bufferProxy, int maxElems, int tasksToDO, int additionalTaskTime) {
+    public Consumer(int id, BufferProxy bufferProxy, int maxElems, int tasksToDO, int additionalTask) {
         this.ID = id;
         this.bufferProxy = bufferProxy;
         this.MAX_ELEMS = maxElems;
         this.TASKS_TO_DO = tasksToDO;
-        this.ADDITIONAL_TASK_TIME = additionalTaskTime;
-        this.additionalTaskCounter = 0;
-        this.START_TIME = new Date().getTime();
+        this.ADDITIONAL_TASK_TIME = 10;
+        this.additionalTask = additionalTask;
     }
 
     @Override
     public void run() {
+        long startTime = new Date().getTime();
         Random random = new Random();
         for (int i = 0; i < TASKS_TO_DO; i++) {
             FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % MAX_ELEMS) + 1);
             while (!futureIntegerList.isDone()) {
-                try {
-                    Thread.sleep(ADDITIONAL_TASK_TIME);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (additionalTask > 0) {
+                    try {
+                        Thread.sleep(ADDITIONAL_TASK_TIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    additionalTask--;
                 }
-                additionalTaskCounter++;
             }
+        }
+
+        while (additionalTask > 0) {
+            try {
+                Thread.sleep(ADDITIONAL_TASK_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            additionalTask--;
         }
 
         long finishTime = new Date().getTime();
 
         ColorUtil.print("consumer(" + ID +"):" +
-                        "done in: " + (finishTime - START_TIME) / 1000 + "s" +
-                        " additional task time: " + (additionalTaskCounter * ADDITIONAL_TASK_TIME) / 1000 + "s",
+                        "done in: " + (finishTime - startTime) / 1000 + "s",
                 Color.MAGENTA);
 
         while (true){
             FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % MAX_ELEMS) + 1);
-            while (!futureIntegerList.isDone()) {
-                try {
-                    Thread.sleep(ADDITIONAL_TASK_TIME);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                additionalTaskCounter++;
+            try {
+                Thread.sleep(ADDITIONAL_TASK_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
