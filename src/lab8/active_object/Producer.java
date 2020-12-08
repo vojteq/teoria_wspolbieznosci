@@ -38,8 +38,6 @@ public class Producer implements Runnable {
                     additionalTask--;
                 }
             }
-            if (i % 100 == 0)
-                ColorUtil.print(i, Color.GREEN);
         }
 
         while (additionalTask > 0) {
