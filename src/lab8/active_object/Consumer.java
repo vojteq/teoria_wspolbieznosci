@@ -38,6 +38,8 @@ public class Consumer implements Runnable{
                     additionalTask--;
                 }
             }
+            if (i % 100 == 0)
+                ColorUtil.print(i, Color.YELLOW);
         }
 
         while (additionalTask > 0) {

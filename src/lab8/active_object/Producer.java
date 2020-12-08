@@ -38,16 +38,18 @@ public class Producer implements Runnable {
                     additionalTask--;
                 }
             }
+            if (i % 100 == 0)
+                ColorUtil.print(i, Color.GREEN);
         }
 
-    while (additionalTask > 0) {
-        try {
-            Thread.sleep(ADDITIONAL_TASK_TIME);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        while (additionalTask > 0) {
+            try {
+                Thread.sleep(ADDITIONAL_TASK_TIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            additionalTask--;
         }
-        additionalTask--;
-    }
 
         long finishTime = new Date().getTime();
 

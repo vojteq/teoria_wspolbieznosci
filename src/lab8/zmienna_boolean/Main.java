@@ -6,9 +6,9 @@ public class Main {
     public static void main(String[] args) {
         int bufferSize = 20;
         int threads = 4;
-        int operationsToDo = 1600;
+        int operationsToDo = 100;
         int monitorOperationDelay = 20;
-        int additionalTask = 12800;
+        int additionalTask = 50;
         Monitor monitor = new Monitor(bufferSize, monitorOperationDelay, monitorOperationDelay);
         ArrayList<Thread> producers = new ArrayList<>();
         ArrayList<Thread> consumers = new ArrayList<>();
