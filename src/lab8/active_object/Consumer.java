@@ -27,7 +27,8 @@ public class Consumer implements Runnable{
         long startTime = new Date().getTime();
         Random random = new Random();
         for (int i = 0; i < TASKS_TO_DO; i++) {
-            FutureIntegerList futureIntegerList = bufferProxy.consumeFuture(Math.abs(random.nextInt() % MAX_ELEMS) + 1);
+            FutureIntegerList futureIntegerList = bufferProxy
+                    .consumeFuture(Math.abs(random.nextInt() % MAX_ELEMS) + 1);
             while (!futureIntegerList.isDone()) {
                 if (additionalTask > 0) {
                     try {
@@ -48,6 +49,8 @@ public class Consumer implements Runnable{
             }
             additionalTask--;
         }
+
+        System.out.println("wykonano cons");
 
         long finishTime = new Date().getTime();
 
