@@ -7,9 +7,9 @@ import org.jcsp.lang.Parallel;
 
 public class Main {
     public static void main(String[] args) {
-        int noProducers = 2;
-        int noConsumers = 2;
-        int noBuffers = 5;
+        int noProducers = 5;
+        int noConsumers = 5;
+        int noBuffers = 2;
         CSProcess[] processes = new CSProcess[noProducers + noConsumers + noBuffers + 1];       // ostatnie miejsce na serwer
 
         init(processes, noProducers, noConsumers, noBuffers);
@@ -32,7 +32,7 @@ public class Main {
             for (int j = 0; j < noBuffers; j++) {
                 One2OneChannelInt producerChannel = Channel.one2oneInt();
                 ((Producer) processes[i]).addChannel(producerChannel);
-                ((Buffer) processes[i + noProducers + noConsumers]).addProducerChannel(producerChannel);
+                ((Buffer) processes[j + noProducers + noConsumers]).addProducerChannel(producerChannel);
             }
         }
 

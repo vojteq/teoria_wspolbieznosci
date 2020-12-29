@@ -7,8 +7,8 @@ import org.jcsp.lang.Parallel;
 
 public class Main {
     public static void main(String[] args) {
-        int noProducers = 2;
-        int noConsumers = 2;
+        int noProducers = 6;
+        int noConsumers = 6;
         int noBuffers = 2;
         CSProcess[] processes = new CSProcess[noProducers + noConsumers + noBuffers];
 
