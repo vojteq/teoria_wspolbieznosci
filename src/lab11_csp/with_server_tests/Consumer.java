@@ -1,9 +1,10 @@
-package lab11_csp.with_server;
+package lab11_csp.with_server_tests;
 
 import lab11_csp.util.Color;
 import lab11_csp.util.Utils;
 import org.jcsp.lang.CSProcess;
 import org.jcsp.lang.One2OneChannelInt;
+import org.jcsp.lang.ProcessInterruptedException;
 
 import java.util.ArrayList;
 
@@ -26,13 +27,17 @@ public class Consumer implements CSProcess {
     @Override
     public void run() {
         int consumptionsDone = 0;
-        while (true) {
-            serverRequestChannel.out().write(1);
-            int bufferIndex = serverResponseChannel.in().read();
-            bufferRequestChannels.get(bufferIndex).out().write(1);
-            int consumedValue = bufferResponseChannels.get(bufferIndex).in().read();
-            Utils.print("(C" + id + " <" + (consumptionsDone++) + ">) consumed: " + consumedValue + ", from B" + bufferIndex, Color.GREEN);
-            Utils.sleep(Main.OPERATION_TIME);
+        try {
+            while (true) {
+                serverRequestChannel.out().write(consumptionsDone);
+                int bufferIndex = serverResponseChannel.in().read();
+                bufferRequestChannels.get(bufferIndex).out().write(1);
+                int consumedValue = bufferResponseChannels.get(bufferIndex).in().read();
+                Utils.print("(C" + id + " <" + (consumptionsDone++) + ">) consumed: " + consumedValue + ", from B" + bufferIndex, Color.GREEN);
+                Utils.sleep(Main.OPERATION_TIME);
+            }
+        } catch (Exception | ProcessInterruptedException ignored) {
+
         }
     }
 

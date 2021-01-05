@@ -1,11 +1,13 @@
-package lab11_csp.with_server;
+package lab11_csp.with_server_tests;
 
 import lab11_csp.util.Color;
 import lab11_csp.util.Utils;
 import org.jcsp.lang.CSProcess;
 import org.jcsp.lang.One2OneChannelInt;
+import org.jcsp.lang.ProcessInterruptedException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class Producer implements CSProcess {
@@ -26,13 +28,18 @@ public class Producer implements CSProcess {
     public void run() {
         Random random = new Random();
         int productionsDone = 0;
-        while(true) {
-            serverRequestChannel.out().write(1);
-            int bufferIndex = serverResponseChannel.in().read();
-            int producedValue = Math.abs(random.nextInt() % 10) + 1;
-            bufferChannels.get(bufferIndex).out().write(producedValue);
-            Utils.print("(P" + id + " <" + (productionsDone++) + ">) produced: " + producedValue + ", to B" + bufferIndex, Color.BLUE);
-            Utils.sleep(Main.OPERATION_TIME);
+        try {
+            while (true) {
+                serverRequestChannel.out().write(productionsDone);
+                int bufferIndex = serverResponseChannel.in().read();
+                int producedValue = Math.abs(random.nextInt() % 10) + 1;
+                bufferChannels.get(bufferIndex).out().write(producedValue);
+                Utils.print("(P" + id + " <" + (productionsDone++) + ">) produced: " + producedValue + ", to B" + bufferIndex, Color.BLUE);
+                Utils.sleep(Main.OPERATION_TIME);
+            }
+        }
+        catch (Exception | ProcessInterruptedException ignored) {
+
         }
     }
 
