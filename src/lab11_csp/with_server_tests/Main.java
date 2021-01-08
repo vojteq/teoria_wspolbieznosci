@@ -9,21 +9,21 @@ import org.jcsp.lang.Parallel;
 import java.nio.file.Path;
 
 public class Main {
-    public static long MAX_TIME = 2000;
-    public static int OPERATION_TIME = 100;
+    public static long MAX_TIME = 100000;     //ms
+    public static int OPERATION_TIME = 20;
     public static final String RESULT_FILE_NAME = System.getProperty("user.dir") + "\\src\\lab11_csp\\with_server_tests\\distBufferResults.txt";
 
     public static Parallel parallel;
 
     public static void main(String[] args) {
-        int[] producers = {1, 2, 3, 4, 5, 10, 20};
-        int[] consumers = {1, 2, 3, 4, 5, 10, 20};
-        int[] buffers = {1, 2, 3, 4, 5, 10, 20};
-        int index = 1;
+        int[] producers = {1, 2, 4, 8};
+        int[] consumers = {1, 2, 4, 8};
+        int[] buffers = {1, 2, 4, 5, 10, 20};
+        int index = 0;
 
         int noProducers = producers[index];
         int noConsumers = consumers[index];
-        int noBuffers = buffers[index];
+        int noBuffers = 4;
         CSProcess[] processes = new CSProcess[noProducers + noConsumers + noBuffers + 1];       // ostatnie miejsce na serwer
 
         init(processes, noProducers, noConsumers, noBuffers);

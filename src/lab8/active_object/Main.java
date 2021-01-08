@@ -4,11 +4,11 @@ import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        int bufferSize = 20;
-        int threads = 4;
+        int bufferSize = 4;
+        int threads = 1;
         int operationsToDo = 1600;
         int operationDelay = 20;
-        int additionalTask = 50;
+        int additionalTask = 0;
         Scheduler scheduler = new Scheduler();
         BufferProxy bufferProxy = new BufferProxy(bufferSize, scheduler, operationDelay, operationDelay);
         LinkedList<Thread> producerThreads = new LinkedList<>();
