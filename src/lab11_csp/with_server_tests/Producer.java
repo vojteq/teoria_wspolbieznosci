@@ -34,8 +34,9 @@ public class Producer implements CSProcess {
                 int bufferIndex = serverResponseChannel.in().read();
                 int producedValue = Math.abs(random.nextInt() % 10) + 1;
                 bufferChannels.get(bufferIndex).out().write(producedValue);
-                Utils.print("(P" + id + " <" + (productionsDone++) + ">) produced: " + producedValue + ", to B" + bufferIndex, Color.BLUE);
                 Utils.sleep(Main.OPERATION_TIME);
+//                Utils.print("(P" + id + " <" + (productionsDone++) + ">) produced: " + producedValue + ", to B" + bufferIndex, Color.BLUE);
+                productionsDone++;
             }
         }
         catch (Exception | ProcessInterruptedException ignored) {

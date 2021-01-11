@@ -39,12 +39,12 @@ public class Buffer implements CSProcess {
             while (true) {
                 int prodIndex = producerAlternative.select();
                 int value = producerChannels.get(prodIndex).in().read();
-                Utils.print("(B" + id + " <" + (productionsDone++) + ">) produced: " + value + ", by P" + prodIndex, Color.MAGENTA);
+//                Utils.print("(B" + id + " <" + (productionsDone++) + ">) produced: " + value + ", by P" + prodIndex, Color.MAGENTA);
 
                 int consIndex = consumerAlternative.select();
                 consumerRequestChannels.get(consIndex).in().read();
                 consumerResponseChannels.get(consIndex).out().write(value);
-                Utils.print("(B" + id + " <" + (consumptionsDone++) + ">) consumed: " + value + ", by C" + consIndex, Color.RED);
+//                Utils.print("(B" + id + " <" + (consumptionsDone++) + ">) consumed: " + value + ", by C" + consIndex, Color.RED);
             }
         }
         catch (Exception | ProcessInterruptedException ignored) {

@@ -6,9 +6,9 @@ public class Main {
 
     public static void main(String[] args) {
         int bufferSize = 4;
-        int threads = 1;
-        int operationDelay = 20;
-        long maxTime = 10000;
+        int threads = 16;
+        int operationDelay = 100;
+        long maxTime = 100000;
         Scheduler scheduler = new Scheduler(maxTime);
         BufferProxy bufferProxy = new BufferProxy(bufferSize, scheduler);
         LinkedList<Thread> producerThreads = new LinkedList<>();
@@ -27,6 +27,7 @@ public class Main {
         for (Thread thread : consumerThreads) {
             thread.start();
         }
+        System.out.println("BUFFER: " + bufferSize);
     }
 
     private static void createThreads(int threads,

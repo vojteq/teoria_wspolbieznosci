@@ -33,8 +33,9 @@ public class Consumer implements CSProcess {
                 int bufferIndex = serverResponseChannel.in().read();
                 bufferRequestChannels.get(bufferIndex).out().write(1);
                 int consumedValue = bufferResponseChannels.get(bufferIndex).in().read();
-                Utils.print("(C" + id + " <" + (consumptionsDone++) + ">) consumed: " + consumedValue + ", from B" + bufferIndex, Color.GREEN);
                 Utils.sleep(Main.OPERATION_TIME);
+//                Utils.print("(C" + id + " <" + (consumptionsDone++) + ">) consumed: " + consumedValue + ", from B" + bufferIndex, Color.GREEN);
+                consumptionsDone++;
             }
         } catch (Exception | ProcessInterruptedException ignored) {
 

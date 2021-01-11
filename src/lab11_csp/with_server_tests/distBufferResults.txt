@@ -1,0 +1,49 @@
+P: 1, C: 1, B: 4
+avg productions done: 3181
+avg consumptions done: 3182
+
+P: 2, C: 2, B: 4
+avg productions done: 3186
+avg consumptions done: 3186
+
+P: 4, C: 4, B: 4
+avg productions done: 3191
+avg consumptions done: 3191
+
+P: 8, C: 8, B: 4
+avg productions done: 3191
+avg consumptions done: 3191
+
+P: 16, C: 16, B: 4
+avg productions done: 3187
+avg consumptions done: 3187
+
+P: 1, C: 1, B: 16
+avg productions done: 3189
+avg consumptions done: 3188
+
+P: 2, C: 2, B: 16
+avg productions done: 3179
+avg consumptions done: 3179
+
+P: 4, C: 4, B: 16
+avg productions done: 3186
+avg consumptions done: 3186
+
+P: 8, C: 8, B: 16
+avg productions done: 3187
+avg consumptions done: 3187
+
+P: 16, C: 16, B: 16
+avg productions done: 3186
+avg consumptions done: 3186
+
+100ms
+P: 16, C: 16, B: 16
+avg productions done: 912
+avg consumptions done: 912
+
+P: 16, C: 16, B: 4
+avg productions done: 911
+avg consumptions done: 911
+

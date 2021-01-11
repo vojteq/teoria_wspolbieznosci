@@ -1,0 +1,57 @@
+B: 4
+
+prod/cons 1
+avg productions done: 3182
+avg consumptions done: 3182
+
+prod/cons 2
+avg productions done: 3186
+avg consumptions done: 3186
+
+prod/cons 4
+avg productions done: 3187
+avg consumptions done: 3187
+
+prod/cons 8
+avg productions done: 3182
+avg consumptions done: 3182
+
+prod/cons 16
+avg productions done: 3180
+avg consumptions done: 3180
+
+B: 4
+prod/cons 16
+avg productions done: 912
+avg consumptions done: 912
+
+
+
+
+
+B: 16
+
+prod/cons 1
+avg productions done: 3183
+avg consumptions done: 3183
+
+prod/cons 2
+avg productions done: 3187
+avg consumptions done: 3187
+
+prod/cons 4
+avg productions done: 3187
+avg consumptions done: 3187
+
+prod/cons 8
+avg productions done: 3189
+avg consumptions done: 3189
+
+prod/cons 16
+avg productions done: 3186
+avg consumptions done: 3186
+
+100ms
+prod/cons 16
+avg productions done: 913
+avg consumptions done: 913
